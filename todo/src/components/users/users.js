@@ -9,7 +9,7 @@ class Users extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            url: "http://localhost:3600/users",
+            url: "https://www.todoapi.ml/users",
             response :"",
         }
     }

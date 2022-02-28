@@ -1,7 +1,12 @@
-.todos {
+.todos-comp {
     overflow-y: auto;
+    max-height: calc(100%);
+}
+
+.todos {
+    // overflow-y: auto;
+    // max-height: calc(100% - 132px);
     max-width: 100%;
-    max-height: calc(100% - 132px);
 
     .todo {
         display: flex;

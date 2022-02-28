@@ -9,7 +9,7 @@ class Todos extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            url: "http://localhost:3600/todos",
+            url: "https://www.todoapi.ml/todos",
             response :"",
         }
     }

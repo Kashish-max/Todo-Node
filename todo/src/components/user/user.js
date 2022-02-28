@@ -10,7 +10,7 @@ class User extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            url: `http://localhost:3600${window.location.pathname}`,
+            url: `https://www.todoapi.ml${window.location.pathname}`,
             response :"",
         }
     }
