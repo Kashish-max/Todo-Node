@@ -1,61 +1,54 @@
-const UserModel = require('../models/users.model');
-const crypto = require('crypto');
 const axios = require('axios');
-const apiKey = '5ab5532999d7f7d9369957d7691f1112';
-const urlWeatherApi = "https://api.openweathermap.org/data/2.5/weather";
-const urlOneCallApi = "https://api.openweathermap.org/data/2.5/onecall";
+const urlApi = "https://jsonplaceholder.typicode.com";
 
-exports.insert = (req, res) => {
-    let salt = crypto.randomBytes(16).toString('base64');
-    let hash = crypto.createHmac('sha512', salt).update(req.body.password).digest("base64");
-    req.body.password = salt + "$" + hash;
-    req.body.permissionLevel = 1;
-    UserModel.createUser(req.body)
-        .then((result) => {
-            res.status(201).send({id: result._id});
-        });
-};
-
-exports.list = (req, res) => {
-    let limit = req.query.limit && req.query.limit <= 100 ? parseInt(req.query.limit) : 10;
-    let page = 0;
-    if (req.query) {
-        if (req.query.page) {
-            req.query.page = parseInt(req.query.page);
-            page = Number.isInteger(req.query.page) ? req.query.page : 0;
-        }
-    }
-    UserModel.list(limit, page)
-        .then((result) => {
-            res.status(200).send(result);
+const findTodoById = (user_id) => {
+    return new Promise((resolve, reject) => {
+        axios.get(`${urlApi}/todos`)
+        .then(async(response) => {
+            resolve(response.data.filter((el) => { return (el.userId == user_id) }))
         })
-};
-
-exports.getById = (req, res) => {
-    UserModel.findById(req.params.userId)
-        .then((result) => {
-            res.status(200).send(result);
+        .catch(error => {
+            reject(error)
         });
-};
+    }) 
+}
 
-exports.getByEmail = (req, res) => {
-    UserModel.findByEmail(req.params.userEmail)
-        .then((result) => {
-            res.status(200).send(result[0]);
-        });
-};
+exports.getTodoList = (req, res) => {
+    console.log("--Todo list requested--")
 
-exports.removeById = (req, res) => {
-    UserModel.removeById(req.params.userId)
-        .then((result)=>{
-            res.status(204).send({});
-        });
-};
-
-exports.fetchWeatherDataByState = (req, res) => {
-    axios.get(`${urlWeatherApi}?q=${req.query.city}&appid=${apiKey}`)
-    .then(response => {
+    axios.get(`${urlApi}/todos`)
+    .then((response) => {
+        response.data.forEach((el) => { (delete el.userId) })
         res.send(response.data)
+    })
+    .catch(error => {
+        res.send(error)
+    });
+}
+
+exports.getUserlist = (req, res) => {
+    console.log("--User list requested--")
+
+    axios.get(`${urlApi}/users`)
+    .then((response) => {
+        res.send(response.data)
+    })
+    .catch(error => {
+        res.send(error);
+    });
+}
+
+exports.getUserById = (req, res) => {
+    console.log("--User Info requested--")
+
+    axios.get(`${urlApi}/users/${req.params.userId}`)
+    .then((response) => {
+        findTodoById(req.params.userId).then((result) => {
+            response.data.todos = result
+            res.send(response.data)            
+        }).catch(error => {
+            res.send(error);
+        })
     })
     .catch(error => {
         res.send(error);

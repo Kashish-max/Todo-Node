@@ -1,0 +1,38 @@
+.home-page {
+    width: 100vw;
+    min-height: 100vh;
+    background: #e3e9ff;
+}
+
+._app {
+    width: 500px;
+    height: 100vh;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .float {
+        width: 100%;
+        height: calc(100% - 10%);
+        background: #fff;
+        // box-shadow: 0 10px 6px -6px #777;
+        box-shadow:
+            0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+            0 6.7px 5.3px rgba(0, 0, 0, 0.048),
+            0 12.5px 10px rgba(0, 0, 0, 0.06),
+            0 22.3px 17.9px rgba(0, 0, 0, 0.072),
+            0 41.8px 33.4px rgba(0, 0, 0, 0.086),
+            0 100px 80px rgba(0, 0, 0, 0.12);
+        overflow-y: hidden;
+    }
+}
+
+@media only screen and (max-width: 500px){
+    ._app{
+        width: unset;
+        max-width: 500px;
+        padding: 0 10px;
+    }
+}
